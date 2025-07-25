@@ -1,0 +1,17 @@
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-namespace
+  namespace: network-demo
+spec:
+  podSelector:
+    matchLabels:
+      run: nginx
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          role: network-policy-demo

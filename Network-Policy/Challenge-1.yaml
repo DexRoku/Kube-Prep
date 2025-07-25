@@ -1,0 +1,55 @@
+---
+
+### Create nginx basic pod
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-basic
+  labels:    
+    app: nginx
+  namespace: network-demo
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+  restartPolicy: Always
+  nodeSelector:
+    kubernetes.io/os: linux 
+
+
+---
+
+### Create busybox pod
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+  labels:    
+    app: busybox
+  namespace: network-demo
+spec:
+  containers:
+  - name: busybox
+    image: busybox:latest
+    command: ["sleep", "3600"]
+  restartPolicy: Always
+  nodeSelector:
+    kubernetes.io/os: linux 
+
+
+---### Create nginx network policy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all-ingress
+  namespace: network-demo
+spec:
+  podSelector:
+    matchLabels:
+      app: nginx
+  policyTypes:
+  - Ingress
+  ingress:
+  - {}
